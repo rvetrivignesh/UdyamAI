@@ -1,0 +1,24 @@
+[
+  {
+    "id": "micro_finance",
+    "name": "Micro Finance Scheme",
+    "minProjectCost": 0,
+    "maxProjectCost": 140000,
+    "interestRate": 6.5,
+    "tenureYears": 3,
+    "moratoriumMonths": 3,
+    "maximumLoan": 125000,
+    "description": "Designed for small-scale micro enterprises requiring lower capital investment."
+  },
+  {
+    "id": "term_loan",
+    "name": "Term Loan Scheme",
+    "minProjectCost": 140001,
+    "maxProjectCost": 5000000,
+    "interestRate": 8.0,
+    "tenureYears": 7,
+    "moratoriumMonths": 6,
+    "maximumLoan": 4500000,
+    "description": "Ideal for medium to larger rural businesses requiring higher investment and longer repayment periods."
+  }
+]
