@@ -15,53 +15,429 @@ import {
   TrendingUp,
   Sparkles,
   CheckSquare,
-  Award
+  Award,
+  Layers,
+  HelpCircle
 } from 'lucide-react';
 
-export default function FeasibilityReport({ report }) {
+/**
+ * 5. Market Reach Section
+ */
+export function MarketReachSection({ report }) {
   const { t } = useTranslation();
+  if (!report?.marketReach) return null;
+  const { marketReach } = report;
 
+  return (
+    <div className="bg-white border-t-4 border-t-[#0b2545] border-x border-b border-slate-300 rounded p-5 md:p-8 shadow-xs">
+      <div className="flex items-center gap-3 mb-6 pb-3 border-b border-slate-200">
+        <div className="p-2.5 bg-blue-900 text-amber-400 rounded">
+          <Compass className="w-6 h-6" />
+        </div>
+        <div>
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Market Dynamics</span>
+          <h3 className="text-xl md:text-2xl font-black text-[#0b2545] uppercase">
+            {t('marketReachHeading')}
+          </h3>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="bg-slate-50 rounded border border-slate-300 p-4">
+          <h4 className="font-bold text-[#0b2545] text-sm uppercase mb-2">
+            {t('consumerBase')}
+          </h4>
+          <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+            {marketReach.consumerBase}
+          </p>
+        </div>
+
+        <div className="bg-slate-50 rounded border border-slate-300 p-4">
+          <h4 className="font-bold text-[#0b2545] text-sm uppercase mb-2">
+            {t('marketReachOverview')}
+          </h4>
+          <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+            {marketReach.summary}
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-blue-50/60 border border-blue-200 rounded p-4">
+        <h4 className="font-bold text-[#0b2545] text-xs md:text-sm uppercase mb-3">
+          {t('distributionChannels')}
+        </h4>
+        <div className="flex flex-wrap gap-2">
+          {(marketReach.distributionChannels || []).map((channel, i) => (
+            <span
+              key={i}
+              className="px-3 py-1.5 bg-white text-blue-950 border border-blue-300 text-xs font-bold rounded shadow-xs"
+            >
+              • {channel}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 6. Market Opportunities & SWOT Section
+ */
+export function OpportunitiesAndSwotSection({ report }) {
+  const { t } = useTranslation();
   if (!report) return null;
+  const { opportunityAnalysis, swot } = report;
 
-  const {
-    marketReach,
-    opportunityAnalysis,
-    swot,
-    threats,
-    competitorMapping,
-    pricing,
-    operationalCosts,
-    workingCapital,
-    suitabilityRating = 'Suitable',
-    actionItems = [],
-    recommendation
-  } = report;
+  return (
+    <div className="space-y-6">
+      {/* Opportunities */}
+      {opportunityAnalysis && (
+        <div className="bg-white border-t-4 border-t-amber-600 border-x border-b border-slate-300 rounded p-5 md:p-8 shadow-xs">
+          <div className="flex items-center gap-3 mb-4 pb-3 border-b border-slate-200">
+            <div className="p-2.5 bg-amber-100 text-amber-800 rounded">
+              <Lightbulb className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Demand Potential</span>
+              <h3 className="text-xl md:text-2xl font-black text-[#0b2545] uppercase">
+                {t('opportunitiesHeading')}
+              </h3>
+            </div>
+          </div>
+
+          <p className="text-xs md:text-sm text-slate-700 mb-5 leading-relaxed font-medium bg-amber-50/50 p-3 rounded border border-amber-200">
+            {opportunityAnalysis.summary}
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {(opportunityAnalysis.opportunities || []).map((opp, i) => (
+              <div key={i} className="flex items-start gap-2.5 bg-slate-50 border border-slate-300 rounded p-3">
+                <TrendingUp className="w-4 h-4 text-[#138808] shrink-0 mt-0.5" />
+                <p className="text-xs md:text-sm font-semibold text-slate-900">{opp}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* SWOT Matrix */}
+      {swot && (
+        <div className="bg-white border-t-4 border-t-[#0b2545] border-x border-b border-slate-300 rounded p-5 md:p-8 shadow-xs">
+          <div className="flex items-center gap-3 mb-6 pb-3 border-b border-slate-200">
+            <div className="p-2.5 bg-[#0b2545] text-white rounded">
+              <Layers className="w-6 h-6" />
+            </div>
+            <div>
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Strategic Assessment</span>
+              <h3 className="text-xl md:text-2xl font-black text-[#0b2545] uppercase">
+                {t('swotHeading')}
+              </h3>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Strengths */}
+            <div className="bg-emerald-50/80 border border-emerald-300 rounded p-4">
+              <h4 className="font-extrabold text-emerald-950 text-sm uppercase mb-3 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#138808]"></span>
+                {t('strengths')}
+              </h4>
+              <ul className="space-y-2">
+                {(swot.strengths || []).map((item, i) => (
+                  <li key={i} className="text-xs md:text-sm text-emerald-950 flex items-start gap-2">
+                    <span className="text-emerald-700 font-bold">•</span>
+                    <span className="font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Weaknesses */}
+            <div className="bg-rose-50/80 border border-rose-300 rounded p-4">
+              <h4 className="font-extrabold text-rose-950 text-sm uppercase mb-3 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-600"></span>
+                {t('weaknesses')}
+              </h4>
+              <ul className="space-y-2">
+                {(swot.weaknesses || []).map((item, i) => (
+                  <li key={i} className="text-xs md:text-sm text-rose-950 flex items-start gap-2">
+                    <span className="text-rose-700 font-bold">•</span>
+                    <span className="font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Opportunities */}
+            <div className="bg-blue-50/80 border border-blue-300 rounded p-4">
+              <h4 className="font-extrabold text-blue-950 text-sm uppercase mb-3 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+                {t('opportunities')}
+              </h4>
+              <ul className="space-y-2">
+                {(swot.opportunities || []).map((item, i) => (
+                  <li key={i} className="text-xs md:text-sm text-blue-950 flex items-start gap-2">
+                    <span className="text-blue-700 font-bold">•</span>
+                    <span className="font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Threats */}
+            <div className="bg-purple-50/80 border border-purple-300 rounded p-4">
+              <h4 className="font-extrabold text-purple-950 text-sm uppercase mb-3 flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-purple-600"></span>
+                {t('threats')}
+              </h4>
+              <ul className="space-y-2">
+                {(swot.threats || []).map((item, i) => (
+                  <li key={i} className="text-xs md:text-sm text-purple-950 flex items-start gap-2">
+                    <span className="text-purple-700 font-bold">•</span>
+                    <span className="font-medium">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * 7. Risk Assessment Section
+ */
+export function RiskAssessmentSection({ report }) {
+  const { t } = useTranslation();
+  if (!report?.threats) return null;
+
+  const getImpactBadge = (impact) => {
+    const imp = (impact || '').toLowerCase();
+    if (imp.includes('high') || imp.includes('उच्च') || imp.includes('అధిక')) {
+      return 'bg-red-100 text-red-900 border-red-300';
+    }
+    if (imp.includes('medium') || imp.includes('मध्यम') || imp.includes('మధ్యస్థ')) {
+      return 'bg-amber-100 text-amber-900 border-amber-300';
+    }
+    return 'bg-blue-100 text-blue-900 border-blue-300';
+  };
+
+  return (
+    <div className="bg-white border-t-4 border-t-rose-600 border-x border-b border-slate-300 rounded p-5 md:p-8 shadow-xs">
+      <div className="flex items-center gap-3 mb-6 pb-3 border-b border-slate-200">
+        <div className="p-2.5 bg-rose-100 text-rose-800 rounded">
+          <ShieldAlert className="w-6 h-6" />
+        </div>
+        <div>
+          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Prudential Safeguards</span>
+          <h3 className="text-xl md:text-2xl font-black text-[#0b2545] uppercase">
+            {t('localRisksHeading')}
+          </h3>
+        </div>
+      </div>
+
+      <div className="space-y-3">
+        {report.threats.map((tItem, i) => (
+          <div key={i} className="bg-slate-50 border border-slate-300 rounded p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2 pb-1 border-b border-slate-200">
+              <h4 className="font-bold text-slate-900 text-sm md:text-base">
+                {tItem.risk}
+              </h4>
+              <span className={`px-2.5 py-0.5 text-xs font-bold rounded border uppercase self-start sm:self-auto ${getImpactBadge(tItem.impact)}`}>
+                {t('impact')}: {tItem.impact}
+              </span>
+            </div>
+            <p className="text-xs md:text-sm text-slate-700 leading-relaxed">
+              <span className="font-bold text-slate-900 uppercase text-xs">{t('mitigation')}: </span>
+              {tItem.mitigation}
+            </p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * 8. Competitor Landscape & Pricing Section
+ */
+export function CompetitorPricingSection({ report }) {
+  const { t } = useTranslation();
+  if (!report) return null;
+  const { competitorMapping, pricing } = report;
+
+  const getCompBadge = (level) => {
+    const lvl = (level || '').toLowerCase();
+    if (lvl.includes('high') || lvl.includes('उच्च') || lvl.includes('అధిక')) {
+      return 'bg-red-700 text-white';
+    }
+    if (lvl.includes('medium') || lvl.includes('मध्यम') || lvl.includes('మధ్యస్థ')) {
+      return 'bg-amber-600 text-white';
+    }
+    return 'bg-[#138808] text-white';
+  };
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Competitor Landscape */}
+      {competitorMapping && (
+        <div className="bg-white border-t-4 border-t-blue-700 border-x border-b border-slate-300 rounded p-5 md:p-6 shadow-xs flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200">
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-blue-800" />
+                <h3 className="text-lg font-black text-[#0b2545] uppercase">
+                  {t('competitorHeading')}
+                </h3>
+              </div>
+              <span className={`px-2.5 py-1 text-xs font-bold uppercase rounded shadow-xs ${getCompBadge(competitorMapping.competitionLevel)}`}>
+                {competitorMapping.competitionLevel}
+              </span>
+            </div>
+            <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+              {competitorMapping.summary}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Pricing Strategy */}
+      {pricing && (
+        <div className="bg-white border-t-4 border-t-emerald-700 border-x border-b border-slate-300 rounded p-5 md:p-6 shadow-xs">
+          <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200">
+            <Tag className="w-5 h-5 text-emerald-800" />
+            <h3 className="text-lg font-black text-[#0b2545] uppercase">
+              {t('pricingHeading')}
+            </h3>
+          </div>
+
+          <div className="bg-emerald-50 rounded p-4 border border-emerald-300 mb-4 text-center">
+            <p className="text-xs font-bold text-emerald-900 uppercase tracking-wider">{t('recommendedPrice')}</p>
+            <p className="text-2xl font-black text-emerald-950 mt-1">{pricing.recommendedPrice}</p>
+            <p className="text-xs text-emerald-800 font-semibold mt-1">{t('priceRange')}: {pricing.priceRange}</p>
+          </div>
+
+          <p className="text-xs md:text-sm text-slate-700 leading-relaxed font-medium">
+            <span className="font-bold text-slate-900 uppercase text-xs">{t('pricingReason')}: </span>
+            {pricing.reason}
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * 9. Operational Costs & Working Capital Section
+ */
+export function OperationalCostsSection({ report }) {
+  const { t } = useTranslation();
+  if (!report) return null;
+  const { operationalCosts, workingCapital } = report;
 
   const totalOpCost = (operationalCosts || []).reduce((acc, c) => acc + (Number(c.estimate) || 0), 0);
 
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Operational Costs */}
+      {operationalCosts && (
+        <div className="bg-white border-t-4 border-t-[#0b2545] border-x border-b border-slate-300 rounded p-5 md:p-6 shadow-xs">
+          <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-slate-200">
+            <div className="flex items-center gap-2">
+              <Wrench className="w-5 h-5 text-slate-800" />
+              <h3 className="text-lg font-black text-[#0b2545] uppercase">
+                {t('operationalCostsHeading')}
+              </h3>
+            </div>
+            {totalOpCost > 0 && (
+              <span className="text-xs font-bold text-emerald-900 bg-emerald-100 px-2.5 py-1 rounded border border-emerald-300">
+                Total: {formatINR(totalOpCost)}
+              </span>
+            )}
+          </div>
+
+          <ExpenseChart costs={operationalCosts} />
+
+          <div className="space-y-2 mt-4">
+            {operationalCosts.map((cost, i) => (
+              <div key={i} className="p-3 bg-slate-50 rounded border border-slate-300 flex justify-between items-start text-xs md:text-sm">
+                <div>
+                  <p className="font-bold text-slate-900">{cost.category}</p>
+                  <p className="text-[11px] text-slate-600 mt-0.5">{cost.note}</p>
+                </div>
+                {cost.estimate > 0 && (
+                  <span className="font-black text-slate-900 shrink-0 ml-3">{formatINR(cost.estimate)}</span>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Working Capital Breakdown */}
+      {workingCapital && (
+        <div className="bg-white border-t-4 border-t-purple-700 border-x border-b border-slate-300 rounded p-5 md:p-6 shadow-xs">
+          <div className="flex items-center gap-2 mb-4 pb-3 border-b border-slate-200">
+            <PiggyBank className="w-5 h-5 text-purple-800" />
+            <h3 className="text-lg font-black text-[#0b2545] uppercase">
+              {t('workingCapitalHeading')}
+            </h3>
+          </div>
+
+          <div className="bg-purple-50 rounded p-4 border border-purple-300 mb-4 text-center">
+            <p className="text-xs font-bold text-purple-900 uppercase tracking-wider">{t('workingCapitalEstimate')}</p>
+            <p className="text-2xl font-black text-purple-950 mt-1">{formatINR(workingCapital.estimate)}</p>
+          </div>
+
+          <div className="space-y-2">
+            {(workingCapital.breakdown || []).map((item, i) => (
+              <div key={i} className="flex justify-between items-center text-xs md:text-sm p-2.5 rounded bg-slate-50 border border-slate-200">
+                <span className="font-bold text-slate-900">{item.item}</span>
+                <span className="text-slate-600 font-medium">{item.note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/**
+ * 10. Overall Assessment & Checklist Section
+ */
+export function OverallRecommendationSection({ report }) {
+  const { t } = useTranslation();
+  if (!report) return null;
+
+  const { suitabilityRating = 'Suitable', actionItems = [], recommendation } = report;
+
   const getSuitabilityStyle = (rating) => {
     const r = (rating || '').toLowerCase();
-    if (r.includes('caution')) {
+    if (r.includes('caution') || r.includes('सावधानी') || r.includes('జాగ్రత్త')) {
       return {
-        badge: 'bg-rose-600 text-white border-rose-700',
-        bg: 'from-rose-50 to-orange-50 border-rose-200',
+        badge: 'bg-rose-700 text-white border-rose-800',
+        bg: 'bg-rose-50/50 border-rose-300',
         text: 'text-rose-950',
         icon: AlertCircle,
         label: t('suitabilityNeedsCaution') || 'Needs Caution'
       };
     }
-    if (r.includes('moderate')) {
+    if (r.includes('moderate') || r.includes('मध्यम') || r.includes('మధ్యస్థ')) {
       return {
-        badge: 'bg-amber-500 text-white border-amber-600',
-        bg: 'from-amber-50 to-yellow-50 border-amber-200',
+        badge: 'bg-amber-600 text-white border-amber-700',
+        bg: 'bg-amber-50/50 border-amber-300',
         text: 'text-amber-950',
         icon: TrendingUp,
         label: t('suitabilityModerately') || 'Moderately Suitable'
       };
     }
     return {
-      badge: 'bg-emerald-600 text-white border-emerald-700',
-      bg: 'from-emerald-50 to-teal-50 border-emerald-200',
+      badge: 'bg-[#138808] text-white border-green-800',
+      bg: 'bg-emerald-50/50 border-emerald-300',
       text: 'text-emerald-950',
       icon: CheckCircle2,
       label: t('suitabilitySuitable') || 'Suitable'
@@ -71,79 +447,45 @@ export default function FeasibilityReport({ report }) {
   const suitability = getSuitabilityStyle(suitabilityRating);
   const SuitabilityIcon = suitability.icon;
 
-  const getImpactBadge = (impact) => {
-    const imp = (impact || '').toLowerCase();
-    if (imp.includes('high')) return 'bg-red-100 text-red-800 border-red-200';
-    if (imp.includes('medium')) return 'bg-amber-100 text-amber-800 border-amber-200';
-    return 'bg-blue-100 text-blue-800 border-blue-200';
-  };
-
-  const getCompLevelBadge = (level) => {
-    const lvl = (level || '').toLowerCase();
-    if (lvl.includes('high')) return 'bg-red-500 text-white';
-    if (lvl.includes('medium')) return 'bg-amber-500 text-white';
-    return 'bg-emerald-600 text-white';
-  };
-
   return (
-    <div className="space-y-8 animate-fade-in my-8" id="feasibility-section">
-      {/* Header Banner */}
-      <div className="bg-gradient-to-r from-emerald-800 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 md:p-8 shadow-xl relative overflow-hidden">
-        <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="p-2 bg-emerald-500/20 text-emerald-300 rounded-xl border border-emerald-500/30">
-            <Sparkles className="w-6 h-6" />
-          </div>
-          <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-400">
-            Hyper-Local AI Feasibility Analysis
-          </span>
-        </div>
-        <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-2">
-          {t('aiReportTitle')}
-        </h2>
-        <p className="text-sm md:text-base text-slate-300 max-w-2xl">
-          {t('aiReportSubtitle')}
-        </p>
-      </div>
-
-      {/* AI Recommendation Highlight & Suitability Badge Card */}
-      <div className={`bg-gradient-to-br ${suitability.bg} border-2 rounded-3xl p-6 md:p-8 shadow-md`}>
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-200/60">
+    <div className="space-y-6">
+      <div className={`bg-white border-t-4 border-t-[#0b2545] border-x border-b border-slate-300 rounded p-5 md:p-8 shadow-xs`}>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-4 border-b border-slate-200">
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-white text-slate-900 rounded-2xl shadow-sm border border-slate-200">
-              <Award className="w-7 h-7 text-emerald-600" />
+            <div className="p-2.5 bg-[#0b2545] text-amber-400 rounded">
+              <Award className="w-7 h-7" />
             </div>
             <div>
-              <span className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Overall Feasibility Assessment</span>
-              <h3 className={`text-2xl font-black ${suitability.text}`}>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">Government Enterprise Advisory</span>
+              <h3 className="text-xl md:text-2xl font-black text-[#0b2545] uppercase">
                 {t('aiRecommendationHeading')}
               </h3>
             </div>
           </div>
 
           <div className="shrink-0">
-            <span className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl font-black text-sm md:text-base shadow-sm border ${suitability.badge}`}>
-              <SuitabilityIcon className="w-5 h-5" />
+            <span className={`inline-flex items-center gap-2 px-4 py-2 rounded font-bold text-sm shadow-xs border ${suitability.badge}`}>
+              <SuitabilityIcon className="w-4 h-4" />
               <span>{suitability.label}</span>
             </span>
           </div>
         </div>
 
-        <p className="text-base md:text-lg text-slate-800 leading-relaxed font-medium mb-6">
+        <p className="text-sm md:text-base text-slate-800 leading-relaxed font-medium mb-6 bg-slate-50 p-4 rounded border border-slate-300">
           {recommendation}
         </p>
 
         {/* Action Items Checklist */}
         {actionItems && actionItems.length > 0 && (
-          <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-5 border border-slate-200/80">
-            <h4 className="font-extrabold text-slate-900 text-sm md:text-base mb-3 flex items-center gap-2">
-              <CheckSquare className="w-5 h-5 text-emerald-600" />
-              <span>Before Applying for Loan — Important Checklist:</span>
+          <div className="bg-slate-50 rounded p-4 border border-slate-300">
+            <h4 className="font-black text-[#0b2545] text-xs md:text-sm uppercase mb-3 flex items-center gap-2">
+              <CheckSquare className="w-4 h-4 text-[#138808]" />
+              <span>{t('checklistHeading')}</span>
             </h4>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
               {actionItems.map((item, idx) => (
-                <div key={idx} className="flex items-start gap-2.5 text-xs md:text-sm font-semibold text-slate-800">
-                  <span className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold text-xs shrink-0 mt-0.5">
+                <div key={idx} className="flex items-start gap-2 text-xs md:text-sm font-semibold text-slate-800 bg-white p-2.5 rounded border border-slate-200">
+                  <span className="w-4 h-4 rounded bg-[#0b2545] text-white flex items-center justify-center font-bold text-[10px] shrink-0 mt-0.5">
                     {idx + 1}
                   </span>
                   <span>{item}</span>
@@ -153,268 +495,28 @@ export default function FeasibilityReport({ report }) {
           </div>
         )}
 
-        <p className="text-xs text-slate-500 mt-4 italic">
-          * Note: All AI insights are estimates intended to assist decision-making. Success depends on execution and local conditions.
+        <p className="text-[11px] text-slate-500 mt-4 italic">
+          {t('disclaimerNote')}
         </p>
       </div>
+    </div>
+  );
+}
 
-      {/* Market Reach & Distribution Channels */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2.5 bg-blue-100 text-blue-700 rounded-xl">
-            <Compass className="w-6 h-6" />
-          </div>
-          <h3 className="text-2xl font-black text-slate-900">
-            {t('marketReachHeading')}
-          </h3>
-        </div>
+/**
+ * Full Combined Feasibility Report (Used when rendering Full Report View or Printing)
+ */
+export default function FeasibilityReport({ report }) {
+  if (!report) return null;
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <h4 className="font-bold text-slate-800 mb-2">{t('consumerBase')}</h4>
-            <p className="text-sm text-slate-700 leading-relaxed">{marketReach.consumerBase}</p>
-          </div>
-          <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
-            <h4 className="font-bold text-slate-800 mb-2">Market Reach Overview</h4>
-            <p className="text-sm text-slate-700 leading-relaxed">{marketReach.summary}</p>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="font-bold text-slate-800 text-sm mb-3">{t('distributionChannels')}</h4>
-          <div className="flex flex-wrap gap-2">
-            {marketReach.distributionChannels.map((channel, i) => (
-              <span
-                key={i}
-                className="px-4 py-2 bg-blue-50 text-blue-800 border border-blue-200 text-xs md:text-sm font-bold rounded-xl"
-              >
-                {channel}
-              </span>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Opportunity Analysis */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2.5 bg-amber-100 text-amber-700 rounded-xl">
-            <Lightbulb className="w-6 h-6" />
-          </div>
-          <h3 className="text-2xl font-black text-slate-900">
-            {t('opportunitiesHeading')}
-          </h3>
-        </div>
-
-        <p className="text-slate-700 mb-6 text-sm md:text-base">{opportunityAnalysis.summary}</p>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {opportunityAnalysis.opportunities.map((opp, i) => (
-            <div key={i} className="flex items-start gap-3 bg-amber-50/60 border border-amber-200 rounded-2xl p-4">
-              <TrendingUp className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <p className="text-sm font-semibold text-amber-950">{opp}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* SWOT Analysis Matrix */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-        <h3 className="text-2xl font-black text-slate-900 mb-6">
-          {t('swotHeading')}
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Strengths */}
-          <div className="bg-emerald-50/70 border border-emerald-200 rounded-2xl p-5">
-            <h4 className="font-extrabold text-emerald-900 text-lg mb-3 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-emerald-600"></span>
-              {t('strengths')}
-            </h4>
-            <ul className="space-y-2">
-              {swot.strengths.map((item, i) => (
-                <li key={i} className="text-xs md:text-sm text-emerald-950 flex items-start gap-2">
-                  <span className="text-emerald-600 font-bold">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Weaknesses */}
-          <div className="bg-rose-50/70 border border-rose-200 rounded-2xl p-5">
-            <h4 className="font-extrabold text-rose-900 text-lg mb-3 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-rose-600"></span>
-              {t('weaknesses')}
-            </h4>
-            <ul className="space-y-2">
-              {swot.weaknesses.map((item, i) => (
-                <li key={i} className="text-xs md:text-sm text-rose-950 flex items-start gap-2">
-                  <span className="text-rose-600 font-bold">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Opportunities */}
-          <div className="bg-blue-50/70 border border-blue-200 rounded-2xl p-5">
-            <h4 className="font-extrabold text-blue-900 text-lg mb-3 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-blue-600"></span>
-              {t('opportunities')}
-            </h4>
-            <ul className="space-y-2">
-              {swot.opportunities.map((item, i) => (
-                <li key={i} className="text-xs md:text-sm text-blue-950 flex items-start gap-2">
-                  <span className="text-blue-600 font-bold">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Threats */}
-          <div className="bg-purple-50/70 border border-purple-200 rounded-2xl p-5">
-            <h4 className="font-extrabold text-purple-900 text-lg mb-3 flex items-center gap-2">
-              <span className="w-3 h-3 rounded-full bg-purple-600"></span>
-              {t('threats')}
-            </h4>
-            <ul className="space-y-2">
-              {swot.threats.map((item, i) => (
-                <li key={i} className="text-xs md:text-sm text-purple-950 flex items-start gap-2">
-                  <span className="text-purple-600 font-bold">•</span>
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Local Risks & Mitigations */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2.5 bg-rose-100 text-rose-700 rounded-xl">
-            <ShieldAlert className="w-6 h-6" />
-          </div>
-          <h3 className="text-2xl font-black text-slate-900">
-            {t('localRisksHeading')}
-          </h3>
-        </div>
-
-        <div className="space-y-4">
-          {threats.map((tItem, i) => (
-            <div key={i} className="bg-slate-50 border border-slate-200 rounded-2xl p-5">
-              <div className="flex items-center justify-between gap-4 mb-2">
-                <h4 className="font-bold text-slate-900 text-base">{tItem.risk}</h4>
-                <span className={`px-3 py-1 text-xs font-extrabold rounded-full border ${getImpactBadge(tItem.impact)}`}>
-                  {tItem.impact} Impact
-                </span>
-              </div>
-              <p className="text-xs md:text-sm text-slate-600">
-                <span className="font-bold text-slate-800">{t('mitigation')}: </span>
-                {tItem.mitigation}
-              </p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Competitor Mapping & Pricing */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Competitor Landscape */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-indigo-600" />
-                <h3 className="text-xl font-bold text-slate-900">{t('competitorHeading')}</h3>
-              </div>
-              <span className={`px-3 py-1 text-xs font-black uppercase rounded-full shadow-sm ${getCompLevelBadge(competitorMapping.competitionLevel)}`}>
-                {competitorMapping.competitionLevel} Competition
-              </span>
-            </div>
-            <p className="text-sm text-slate-700 leading-relaxed">
-              {competitorMapping.summary}
-            </p>
-          </div>
-        </div>
-
-        {/* Pricing Recommendation */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-2 mb-4">
-            <Tag className="w-5 h-5 text-emerald-600" />
-            <h3 className="text-xl font-bold text-slate-900">{t('pricingHeading')}</h3>
-          </div>
-
-          <div className="bg-emerald-50 rounded-2xl p-4 border border-emerald-200 mb-4 text-center">
-            <p className="text-xs font-bold text-emerald-700 uppercase tracking-wider">{t('recommendedPrice')}</p>
-            <p className="text-2xl font-black text-emerald-950 mt-1">{pricing.recommendedPrice}</p>
-            <p className="text-xs text-emerald-600 font-medium mt-1">Market Range: {pricing.priceRange}</p>
-          </div>
-
-          <p className="text-xs md:text-sm text-slate-600">
-            <span className="font-bold text-slate-800">{t('pricingReason')}: </span>
-            {pricing.reason}
-          </p>
-        </div>
-      </div>
-
-      {/* Operational Costs & Working Capital */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {/* Operational Costs */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-          <div className="flex items-center justify-between gap-4 mb-4">
-            <div className="flex items-center gap-2">
-              <Wrench className="w-5 h-5 text-slate-700" />
-              <h3 className="text-xl font-bold text-slate-900">{t('operationalCostsHeading')}</h3>
-            </div>
-            {totalOpCost > 0 && (
-              <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                Total: {formatINR(totalOpCost)}
-              </span>
-            )}
-          </div>
-
-          <ExpenseChart costs={operationalCosts} />
-
-          <div className="space-y-3 mt-4">
-            {operationalCosts.map((cost, i) => (
-              <div key={i} className="p-3.5 bg-slate-50 rounded-xl border border-slate-200 flex justify-between items-start">
-                <div>
-                  <p className="font-bold text-slate-900 text-xs md:text-sm">{cost.category}</p>
-                  <p className="text-xs text-slate-600 mt-0.5">{cost.note}</p>
-                </div>
-                {cost.estimate > 0 && (
-                  <span className="text-xs font-bold text-slate-900 shrink-0 ml-3">{formatINR(cost.estimate)}</span>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Working Capital Breakdown */}
-        <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm">
-          <div className="flex items-center gap-2 mb-4">
-            <PiggyBank className="w-5 h-5 text-purple-600" />
-            <h3 className="text-xl font-bold text-slate-900">{t('workingCapitalHeading')}</h3>
-          </div>
-
-          <div className="bg-purple-50 rounded-2xl p-4 border border-purple-200 mb-4 text-center">
-            <p className="text-xs font-bold text-purple-700 uppercase tracking-wider">{t('workingCapitalEstimate')}</p>
-            <p className="text-2xl font-black text-purple-950 mt-1">{formatINR(workingCapital.estimate)}</p>
-          </div>
-
-          <div className="space-y-2">
-            {workingCapital.breakdown.map((item, i) => (
-              <div key={i} className="flex justify-between items-center text-xs md:text-sm p-2.5 rounded-lg bg-slate-50 border border-slate-100">
-                <span className="font-bold text-slate-800">{item.item}</span>
-                <span className="text-slate-600">{item.note}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+  return (
+    <div className="space-y-6">
+      <MarketReachSection report={report} />
+      <OpportunitiesAndSwotSection report={report} />
+      <RiskAssessmentSection report={report} />
+      <CompetitorPricingSection report={report} />
+      <OperationalCostsSection report={report} />
+      <OverallRecommendationSection report={report} />
     </div>
   );
 }

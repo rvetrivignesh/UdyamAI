@@ -5,19 +5,26 @@ export default function Button({
   onClick,
   type = 'button',
   variant = 'primary',
+  size = 'md',
   fullWidth = false,
   disabled = false,
   icon: Icon,
   className = ''
 }) {
-  const baseStyles = 'inline-flex items-center justify-center font-bold rounded-xl transition-all duration-200 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-md';
+  const baseStyles = 'inline-flex items-center justify-center font-bold rounded transition-colors duration-150 focus:outline-none focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer shadow-sm uppercase tracking-wider select-none';
   
-  const sizeStyles = 'px-6 py-3.5 text-base md:text-lg';
+  const sizeStyles = {
+    sm: 'px-3 py-1.5 text-xs',
+    md: 'px-5 py-2.5 text-sm md:text-base',
+    lg: 'px-7 py-3.5 text-base md:text-lg'
+  }[size] || 'px-5 py-2.5 text-sm md:text-base';
 
   const variants = {
-    primary: 'bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-emerald-300 shadow-emerald-200',
-    secondary: 'bg-slate-800 hover:bg-slate-900 text-white focus:ring-slate-300 shadow-slate-300',
-    outline: 'bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-300 focus:ring-slate-200'
+    primary: 'bg-[#0b2545] hover:bg-[#134074] text-white border border-[#0b2545] focus:ring-blue-400',
+    govGreen: 'bg-[#138808] hover:bg-[#0f6b06] text-white border border-[#138808] focus:ring-green-400',
+    govAmber: 'bg-[#d97706] hover:bg-[#b45309] text-white border border-[#d97706] focus:ring-amber-400',
+    secondary: 'bg-slate-800 hover:bg-slate-900 text-white border border-slate-800 focus:ring-slate-400',
+    outline: 'bg-white hover:bg-slate-100 text-slate-800 border border-slate-400 focus:ring-slate-300'
   };
 
   return (
@@ -25,9 +32,9 @@ export default function Button({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${sizeStyles} ${variants[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`${baseStyles} ${sizeStyles} ${variants[variant] || variants.primary} ${fullWidth ? 'w-full' : ''} ${className}`}
     >
-      {Icon && <Icon className="w-5 h-5 mr-2 shrink-0" />}
+      {Icon && <Icon className="w-4 h-4 mr-2 shrink-0" />}
       <span>{children}</span>
     </button>
   );

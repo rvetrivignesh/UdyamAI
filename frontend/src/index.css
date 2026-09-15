@@ -1,23 +1,70 @@
 @import "tailwindcss";
 
 @layer base {
+  :root {
+    --gov-saffron: #ff9933;
+    --gov-white: #ffffff;
+    --gov-green: #138808;
+    --gov-navy: #0b2545;
+    --gov-blue: #134074;
+    --gov-slate: #f4f6f8;
+  }
+
   body {
-    @apply bg-slate-50 text-slate-900 font-sans antialiased min-h-screen selection:bg-emerald-500 selection:text-white;
+    @apply bg-slate-100 text-slate-900 font-sans antialiased min-h-screen selection:bg-amber-600 selection:text-white;
+  }
+
+  /* Sharp / Reduced curvature standard for government aesthetic */
+  button, input, select, textarea, .gov-card {
+    border-radius: 4px;
   }
 }
 
-/* Custom Accessibility & Animation Enhancements */
+/* National Tricolor Top Banner Line */
+.gov-tricolor-bar {
+  height: 4px;
+  width: 100%;
+  background: linear-gradient(90deg, #ff9933 0%, #ff9933 33.3%, #ffffff 33.3%, #ffffff 66.6%, #138808 66.6%, #138808 100%);
+}
+
+.gov-tricolor-border {
+  border-image: linear-gradient(to right, #ff9933, #e2e8f0, #138808) 1;
+}
+
+/* Animations */
 .animate-fade-in {
-  animation: fadeIn 0.4s ease-out forwards;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(8px);
+    transform: translateY(6px);
   }
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* High contrast official table styling */
+.gov-table th {
+  background-color: #0f2942;
+  color: #ffffff;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Print Optimization */
+@media print {
+  body {
+    background-color: #ffffff !important;
+  }
+  .print-hidden {
+    display: none !important;
+  }
+  .print-break-inside-avoid {
+    break-inside: avoid;
   }
 }

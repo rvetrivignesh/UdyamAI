@@ -10,13 +10,12 @@ const languages = [
 
 export default function LanguageSelector() {
   const { i18n, t } = useTranslation();
-
   const currentLanguage = i18n.language || 'en';
 
   return (
-    <div className="flex items-center gap-2 bg-white/80 backdrop-blur-md px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm">
-      <Globe className="w-4 h-4 text-emerald-600 shrink-0" />
-      <span className="text-xs font-semibold text-slate-500 hidden sm:inline">{t('selectLanguage')}:</span>
+    <div className="flex items-center gap-1.5 bg-black/20 border border-white/20 px-2 py-0.5 rounded text-xs">
+      <Globe className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+      <span className="text-[10px] text-slate-300 uppercase font-semibold hidden md:inline">{t('selectLanguage')}:</span>
       <div className="flex items-center gap-1">
         {languages.map((lang) => {
           const isActive = currentLanguage === lang.code;
@@ -24,10 +23,10 @@ export default function LanguageSelector() {
             <button
               key={lang.code}
               onClick={() => i18n.changeLanguage(lang.code)}
-              className={`px-3 py-1 text-xs md:text-sm font-medium rounded-full transition-all duration-200 ${
+              className={`px-2 py-0.5 text-[11px] font-bold rounded transition-colors ${
                 isActive
-                  ? 'bg-emerald-600 text-white shadow-sm font-bold scale-105'
-                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                  ? 'bg-amber-400 text-[#0b2545] shadow-xs'
+                  : 'text-slate-200 hover:bg-white/10 hover:text-white'
               }`}
               aria-label={`Switch language to ${lang.name}`}
             >
